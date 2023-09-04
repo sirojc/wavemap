@@ -12,6 +12,13 @@
       ],
       "type": "string"
     },
+    "body_frame": {
+      "description": "Name of the coordinate frame of the robot's body. Will only be used to determine the robot's position during pruning when local mapping is enabled.",
+      "examples": [
+        "body"
+      ],
+      "type": "string"
+    },
     "thresholding_period": {
       "description": "Time period controlling how often the map is thresholded. To disable thresholding, set it to a negative number [not recommended].",
       "$ref": "value_with_unit/convertible_to_seconds.json"

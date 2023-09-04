@@ -15,7 +15,7 @@ namespace wavemap {
 /**
  * Config struct for the hashed wavelet octree volumetric data structure.
  */
-struct HashedWaveletOctreeConfig : ConfigBase<HashedWaveletOctreeConfig, 5> {
+struct HashedWaveletOctreeConfig : ConfigBase<HashedWaveletOctreeConfig, 6> {
   //! Maximum resolution of the map, set as the width of the smallest cell that
   //! it can represent.
   Meters<FloatingPoint> min_cell_width = 0.1f;
@@ -31,6 +31,9 @@ struct HashedWaveletOctreeConfig : ConfigBase<HashedWaveletOctreeConfig, 5> {
   //! of time. Useful to avoid pruning blocks that are still being updated,
   //! whose nodes would most likely directly be reallocated if pruned.
   Seconds<FloatingPoint> only_prune_blocks_if_unused_for = 5.f;
+  //! Distance beyond which blocks are deleted by pruneDistant(body_position),
+  //! even if they're not empty.
+  Meters<FloatingPoint> remove_blocks_beyond_distance = -1.f;
 
   static MemberMap memberMap;
 
@@ -73,7 +76,8 @@ class HashedWaveletOctree : public VolumetricDataStructureBase {
   size_t size() const override;
   void threshold() override;
   void prune() override;
-  void pruneDistant() override;
+  void pruneSmart(
+      std::optional<std::reference_wrapper<const Point3D>> t_W_B) override;
   void clear() override { blocks_.clear(); }
 
   size_t getMemoryUsage() const override;

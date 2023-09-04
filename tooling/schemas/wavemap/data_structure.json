@@ -100,6 +100,10 @@
         "only_prune_blocks_if_unused_for": {
           "description": "Only prune blocks if they have not been updated for at least this amount of time. Useful to avoid pruning blocks that are still being updated, whose nodes would most likely directly be reallocated if pruned.",
           "$ref": "value_with_unit/convertible_to_seconds.json"
+        },
+        "remove_blocks_beyond_distance": {
+          "description": "Distance beyond which blocks are deleted by pruneDistant(body_position), even if they're not empty.",
+          "$ref": "value_with_unit/convertible_to_meters.json"
         }
       }
     },
@@ -129,6 +133,10 @@
         "only_prune_blocks_if_unused_for": {
           "description": "Only prune blocks if they have not been updated for at least this amount of time. Useful to avoid pruning blocks that are still being updated, whose nodes would most likely directly be reallocated if pruned.",
           "$ref": "value_with_unit/convertible_to_seconds.json"
+        },
+        "remove_blocks_beyond_distance": {
+          "description": "Distance beyond which blocks are deleted by pruneDistant(body_position), even if they're not empty.",
+          "$ref": "value_with_unit/convertible_to_meters.json"
         }
       }
     }

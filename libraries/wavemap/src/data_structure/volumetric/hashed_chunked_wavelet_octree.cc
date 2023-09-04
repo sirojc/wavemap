@@ -8,7 +8,8 @@ DECLARE_CONFIG_MEMBERS(HashedChunkedWaveletOctreeConfig,
                       (min_log_odds)
                       (max_log_odds)
                       (tree_height)
-                      (only_prune_blocks_if_unused_for));
+                      (only_prune_blocks_if_unused_for)
+                      (remove_blocks_beyond_distance));
 
 bool HashedChunkedWaveletOctreeConfig::isValid(bool verbose) const {
   bool is_valid = true;
@@ -40,9 +41,21 @@ void HashedChunkedWaveletOctree::prune() {
   }
 }
 
-void HashedChunkedWaveletOctree::pruneDistant() {
+void HashedChunkedWaveletOctree::pruneSmart(
+    std::optional<std::reference_wrapper<const Point3D>> t_W_B) {
   std::unordered_set<BlockIndex, IndexHash<kDim>> blocks_to_remove;
   for (auto& [block_index, block] : blocks_) {
+    if (0.f < config_.remove_blocks_beyond_distance && t_W_B) {
+      const auto block_node_index =
+          OctreeIndex{config_.tree_height, block_index};
+      const auto block_aabb =
+          convert::nodeIndexToAABB(block_node_index, config_.min_cell_width);
+      const FloatingPoint d_B_block = block_aabb.minDistanceTo(t_W_B->get());
+      if (config_.remove_blocks_beyond_distance < d_B_block) {
+        blocks_to_remove.emplace(block_index);
+        continue;
+      }
+    }
     if (config_.only_prune_blocks_if_unused_for <
         block.getTimeSinceLastUpdated()) {
       block.prune();

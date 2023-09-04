@@ -70,7 +70,8 @@ class VolumetricDataStructureBase {
   virtual size_t size() const = 0;
   virtual void threshold() = 0;
   virtual void prune() = 0;
-  virtual void pruneDistant() {
+  virtual void pruneSmart(
+      std::optional<std::reference_wrapper<const Point3D>> /*t_W_B*/) {
     // NOTE: This method can be overriden by derived classes to provide more
     //       efficient selective pruning strategies. Otherwise, just prune all.
     prune();

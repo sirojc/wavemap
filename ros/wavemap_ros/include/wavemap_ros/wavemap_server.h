@@ -23,10 +23,14 @@ namespace wavemap {
 /**
  * Config struct for wavemap's ROS server.
  */
-struct WavemapServerConfig : ConfigBase<WavemapServerConfig, 5> {
+struct WavemapServerConfig : ConfigBase<WavemapServerConfig, 6> {
   //! Name of the coordinate frame in which to store the map.
   //! Will be used as the frame_id for ROS TF lookups.
   std::string world_frame = "odom";
+  //! Name of the coordinate frame of the robot's body.
+  //! Will only be used to determine the robot's position during pruning
+  //! when local mapping is enabled.
+  std::string body_frame;
   //! Time period controlling how often the map is thresholded.
   //! To disable thresholding, set it to a negative number [not recommended].
   Seconds<FloatingPoint> thresholding_period = 1.f;
@@ -52,6 +56,7 @@ class WavemapServer {
   WavemapServer(ros::NodeHandle nh, ros::NodeHandle nh_private,
                 const WavemapServerConfig& config);
 
+  void pruneMap();
   void publishMap(bool republish_whole_map = false);
   bool saveMap(const std::string& file_path) const;
   bool loadMap(const std::string& file_path);

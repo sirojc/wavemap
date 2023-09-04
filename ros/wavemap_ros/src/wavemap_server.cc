@@ -14,6 +14,7 @@
 namespace wavemap {
 DECLARE_CONFIG_MEMBERS(WavemapServerConfig,
                       (world_frame)
+                      (body_frame)
                       (thresholding_period)
                       (pruning_period)
                       (publication_period)
@@ -59,6 +60,25 @@ WavemapServer::WavemapServer(ros::NodeHandle nh, ros::NodeHandle nh_private,
   subscribeToTopics(nh);
   advertiseTopics(nh_private);
   advertiseServices(nh_private);
+}
+
+void WavemapServer::pruneMap() {
+  // If the robot's body frame name is set,
+  // look up the robot's position and consider it when pruning.
+  if (!config_.body_frame.empty()) {
+    Transformation3D T_W_B;
+    if (transformer_->lookupTransform(config_.world_frame, config_.body_frame,
+                                      ros::Time::now(), T_W_B)) {
+      occupancy_map_->pruneSmart(T_W_B.getPosition());
+      return;
+    }
+  }
+
+  // If the frame name is not set or the pose lookup fails,
+  // perform smart pruning without considering the robot's position.
+  // NOTE: For most data structures, the pruning will still take last-update
+  //       time information into account.
+  occupancy_map_->pruneSmart(std::nullopt);
 }
 
 void WavemapServer::publishMap(bool republish_whole_map) {
@@ -121,9 +141,9 @@ void WavemapServer::subscribeToTimers(const ros::NodeHandle& nh) {
   if (0.f < config_.pruning_period) {
     ROS_INFO_STREAM("Registering map pruning timer with period "
                     << config_.pruning_period << "s");
-    map_pruning_timer_ = nh.createTimer(
-        ros::Duration(config_.pruning_period),
-        [this](const auto& /*event*/) { occupancy_map_->prune(); });
+    map_pruning_timer_ =
+        nh.createTimer(ros::Duration(config_.pruning_period),
+                       [this](const auto& /*event*/) { pruneMap(); });
   }
 
   if (0.f < config_.publication_period) {
