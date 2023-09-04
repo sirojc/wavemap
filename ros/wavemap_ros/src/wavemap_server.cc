@@ -67,8 +67,9 @@ void WavemapServer::pruneMap() {
   // look up the robot's position and consider it when pruning.
   if (!config_.body_frame.empty()) {
     Transformation3D T_W_B;
+    const ros::Time most_recent_stamp = ros::Time(0);
     if (transformer_->lookupTransform(config_.world_frame, config_.body_frame,
-                                      ros::Time::now(), T_W_B)) {
+                                      most_recent_stamp, T_W_B)) {
       occupancy_map_->pruneSmart(T_W_B.getPosition());
       return;
     }
