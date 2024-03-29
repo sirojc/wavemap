@@ -12,6 +12,10 @@ std::optional<Point3D> getCollisionFreePosition(
     const VolumetricDataStructureBase& occupancy_map, const HashedBlocks& esdf,
     FloatingPoint robot_radius,
     std::optional<AABB<Point3D>> aabb = std::nullopt);
+
+std::optional<Point2D> getCollisionFree2DPosition(
+    const VolumetricDataStructureBase& occupancy_map, const HashedBlocks& esdf,
+    FloatingPoint robot_radius);
 }  // namespace wavemap
 
 #endif  // WAVEMAP_UTILS_ESDF_COLLISION_UTILS_H_
