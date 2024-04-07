@@ -3,7 +3,7 @@ project(wavemap)
 
 # Dependencies
 find_package(catkin
-    REQUIRED COMPONENTS glog_catkin eigen_catkin tracy_catkin minkindr)
+    REQUIRED COMPONENTS roscpp glog_catkin eigen_catkin tracy_catkin minkindr sensor_msgs)
 
 if (ENABLE_BENCHMARKING)
   find_package(benchmark REQUIRED)
@@ -21,10 +21,12 @@ catkin_package(
     LIBRARIES
     ${PROJECT_NAME}
     CATKIN_DEPENDS
+    roscpp
     glog_catkin
     eigen_catkin
     tracy_catkin
     minkindr
+    sensor_msgs
     CFG_EXTRAS
     wavemap-extras.cmake)
 # NOTE: The test headers are normally not exported (e.g. by adding test/include

@@ -1,10 +1,14 @@
 #ifndef WAVEMAP_INTEGRATOR_PROJECTION_MODEL_PINHOLE_CAMERA_PROJECTOR_H_
 #define WAVEMAP_INTEGRATOR_PROJECTION_MODEL_PINHOLE_CAMERA_PROJECTOR_H_
 
+#include <ros/ros.h>
 #include <algorithm>
+#include <sensor_msgs/CameraInfo.h>
 
 #include "wavemap/config/config_base.h"
 #include "wavemap/integrator/projection_model/projector_base.h"
+
+#include <iostream>
 
 namespace wavemap {
 /**
@@ -13,21 +17,21 @@ namespace wavemap {
 struct PinholeCameraProjectorConfig
     : ConfigBase<PinholeCameraProjectorConfig, 6> {
   //! The image's width in pixels.
-  IndexElement width = 0;
+  IndexElement width = -1;
   //! The image's height in pixels.
-  IndexElement height = 0;
+  IndexElement height = -1;
   //! Fx according to ROS' CameraInfo convention:
   //! http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/CameraInfo.html.
-  FloatingPoint fx = 0.f;
+  FloatingPoint fx = -1.f;
   //! Fy according to ROS' CameraInfo convention:
   //! http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/CameraInfo.html.
-  FloatingPoint fy = 0.f;
+  FloatingPoint fy = -1.f;
   //! Cx according to ROS' CameraInfo convention:
   //! http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/CameraInfo.html.
-  FloatingPoint cx = 0.f;
+  FloatingPoint cx = -1.f;
   //! Cy according to ROS' CameraInfo convention:
   //! http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/CameraInfo.html.
-  FloatingPoint cy = 0.f;
+  FloatingPoint cy = -1.f;
 
   static MemberMap memberMap;
 
@@ -45,9 +49,45 @@ class PinholeCameraProjector : public ProjectorBase {
  public:
   using Config = PinholeCameraProjectorConfig;
 
-  explicit PinholeCameraProjector(const Config& config)
+  explicit PinholeCameraProjector(const std::string& topic_name)
       : ProjectorBase(Vector2D::Ones(), Vector2D::Zero()),
-        config_(config.checkValid()) {}
+        topic_name_(topic_name) {
+    ros::NodeHandle nh;
+    camera_info_subscriber_ = nh.subscribe(topic_name_, 1,
+        &PinholeCameraProjector::cameraInfoCallback, this);
+  }
+
+  void cameraInfoCallback(const sensor_msgs::CameraInfoConstPtr& camera_info) {
+    ROS_INFO_ONCE("Received camera info for topic %s", topic_name_.c_str());
+
+    // Update the configuration parameters
+    config_.width = camera_info->width;
+    config_.height = camera_info->height;
+    config_.fx = camera_info->K[0];
+    config_.fy = camera_info->K[4];
+    config_.cx = camera_info->K[2];
+    config_.cy = camera_info->K[5];
+
+    // Update parameters that depend on them
+    fxfy_ = config_.fx * config_.fy;
+    fxfy_inv_ = 1.f / fxfy_;
+    cxfy_ = config_.cx * config_.fy;
+    cyfx_ = config_.cy * config_.fx;
+  }
+
+  bool isConfigInitialized() const {
+    return config_.isValid(false);
+  }
+
+  void printConfig() const {
+    std::cout << "Config for topic " << topic_name_ << ": " << std::endl 
+              << "width: " << config_.width << std::endl 
+              << "height: " << config_.height << std::endl 
+              << "fx: " << config_.fx << std::endl 
+              << "fy: " << config_.fx << std::endl 
+              << "cx: " << config_.cx << std::endl 
+              << "cy: " << config_.cy << std::endl;
+  }
 
   IndexElement getNumRows() const final { return config_.width; }
   IndexElement getNumColumns() const final { return config_.height; }
@@ -90,13 +130,19 @@ class PinholeCameraProjector : public ProjectorBase {
       const Point3D& t_W_C) const final;
 
  private:
-  const PinholeCameraProjectorConfig config_;
+  const std::string topic_name_;
+  PinholeCameraProjectorConfig config_;
 
-  const FloatingPoint fxfy_ = config_.fx * config_.fy;
-  const FloatingPoint fxfy_inv_ = 1.f / fxfy_;
-  const FloatingPoint cxfy_ = config_.cx * config_.fy;
-  const FloatingPoint cyfx_ = config_.cy * config_.fx;
+  ros::Subscriber camera_info_subscriber_;
+
+  FloatingPoint fxfy_ = config_.fx * config_.fy;
+  FloatingPoint fxfy_inv_ = 1.f / fxfy_;
+  FloatingPoint cxfy_ = config_.cx * config_.fy;
+  FloatingPoint cyfx_ = config_.cy * config_.fx;
 };
+
+
+
 }  // namespace wavemap
 
 #include "wavemap/integrator/projection_model/impl/pinhole_camera_projector_inl.h"

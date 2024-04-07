@@ -4,6 +4,8 @@
 #include "wavemap/integrator/projection_model/pinhole_camera_projector.h"
 #include "wavemap/integrator/projection_model/spherical_projector.h"
 
+#include <stdlib.h>
+
 namespace wavemap {
 ProjectorBase::Ptr wavemap::ProjectorFactory::create(
     const param::Value& params,
@@ -46,14 +48,26 @@ ProjectorBase::Ptr wavemap::ProjectorFactory::create(
       }
     }
     case ProjectorType::kPinholeCameraProjector: {
-      if (const auto config =
-              PinholeCameraProjectorConfig::from(params, "projection_model");
-          config) {
-        return std::make_shared<PinholeCameraProjector>(config.value());
-      } else {
-        LOG(ERROR) << "Pinhole projector config could not be loaded.";
-        return nullptr;
+      std::string topic_name_config = params.getChild("projection_model")->getChild("config_topic_name")->get<std::string>().value();      
+      ROS_INFO("%s", ("--------------------kPinholeCameraProjector Initialization for: " + topic_name_config).c_str());
+
+      auto integrator = std::make_shared<PinholeCameraProjector>(topic_name_config);
+    
+      // return integrator;
+      int num_tries = 0;
+      while (num_tries < 10) {
+        ros::spinOnce();
+
+        if (integrator->isConfigInitialized()) {
+          integrator->printConfig();
+          return integrator;
+        }
+        sleep(1); // wait for 1s
+        num_tries++;
       }
+      ROS_ERROR("Pinhole projector config for topic %s is not valid after 10 tries.", topic_name_config.c_str());
+
+      return nullptr;
     }
   }
 
