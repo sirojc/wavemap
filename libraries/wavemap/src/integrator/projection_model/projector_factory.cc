@@ -55,7 +55,7 @@ ProjectorBase::Ptr wavemap::ProjectorFactory::create(
     
       // return integrator;
       int num_tries = 0;
-      while (num_tries < 10) {
+      while (num_tries < 300) {
         ros::spinOnce();
 
         if (integrator->isConfigInitialized()) {
@@ -65,7 +65,7 @@ ProjectorBase::Ptr wavemap::ProjectorFactory::create(
         sleep(1); // wait for 1s
         num_tries++;
       }
-      ROS_ERROR("Pinhole projector config for topic %s is not valid after 10 tries.", topic_name_config.c_str());
+      ROS_ERROR("Pinhole projector config for topic %s is not valid after 300 tries.", topic_name_config.c_str());
 
       return nullptr;
     }

@@ -32,9 +32,10 @@
          value="gdb -ex run --args"/>
     <arg unless="$(arg debug_mode)" name="launch_prefix" value=""/>
 
+    <!-- Removed screen for visibility -->
+    <!-- output="screen" -->
     <node name="wavemap" pkg="wavemap_ros"
           type="wavemap_server_node"
-          output="screen"
           launch-prefix="$(arg launch_prefix)">
       <rosparam file="$(arg param_file)"/>
     </node>
