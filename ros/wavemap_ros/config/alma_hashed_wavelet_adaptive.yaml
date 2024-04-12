@@ -14,13 +14,13 @@ inputs:
     general:
       topic_name: "/depth_camera_front_lower/depth/image_rect_raw"
       depth_scale_factor: 0.001
-      topic_queue_length: 1
+      topic_queue_length: 10
       max_wait_for_pose: { seconds: 1.0 }
-      time_offset: { seconds: -0.025 }
+      time_offset: { seconds: 0.0 }
     integrators:
       - integration_method:
           type: hashed_wavelet_integrator
-          min_range: { meters: 0.1 }
+          min_range: { meters: 0.5 }
           max_range: { meters: 1.0 }
           termination_update_error: 0.1
           termination_height: 0
@@ -29,9 +29,9 @@ inputs:
           config_topic_name: "/depth_camera_front_lower/depth/camera_info"
         measurement_model:
           type: continuous_ray
-          range_sigma: { meters: 0.1 }
-          scaling_free: 0.2
-          scaling_occupied: 0.4
+          range_sigma: { meters: 0.05 }
+          scaling_free: 0.4
+          scaling_occupied: 0.6
       - integration_method:
           type: hashed_wavelet_integrator
           min_range: { meters: 1.0 }
@@ -43,22 +43,22 @@ inputs:
           config_topic_name: "/depth_camera_front_lower/depth/camera_info"
         measurement_model:
           type: continuous_ray
-          range_sigma: { meters: 0.4 }
-          scaling_free: 0.2
-          scaling_occupied: 0.4
+          range_sigma: { meters: 0.15 }
+          scaling_free: 0.4
+          scaling_occupied: 0.6
 
   # depth_camera_rear_lower
   - type: depth_image
     general:
       topic_name: "/depth_camera_rear_lower/depth/image_rect_raw"
       depth_scale_factor: 0.001 # depth is in mm
-      topic_queue_length: 1
+      topic_queue_length: 10
       max_wait_for_pose: { seconds: 1.0 }
-      time_offset: { seconds: -0.025 }
+      time_offset: { seconds: 0.0 }
     integrators:
       - integration_method:
           type: hashed_wavelet_integrator
-          min_range: { meters: 0.1 }
+          min_range: { meters: 0.5}
           max_range: { meters: 1.0 }
           termination_update_error: 0.1
           termination_height: 0
@@ -67,9 +67,9 @@ inputs:
           config_topic_name: "/depth_camera_rear_lower/depth/camera_info"
         measurement_model:
           type: continuous_ray
-          range_sigma: { meters: 0.1 }
-          scaling_free: 0.2
-          scaling_occupied: 0.4
+          range_sigma: { meters: 0.05 }
+          scaling_free: 0.4
+          scaling_occupied: 0.6
       - integration_method:
           type: hashed_wavelet_integrator
           min_range: { meters: 1.0 }
@@ -81,18 +81,18 @@ inputs:
           config_topic_name: "/depth_camera_rear_lower/depth/camera_info"
         measurement_model:
           type: continuous_ray
-          range_sigma: { meters: 0.4 }
-          scaling_free: 0.2
-          scaling_occupied: 0.4
+          range_sigma: { meters: 0.15 }
+          scaling_free: 0.4
+          scaling_occupied: 0.6
 
     # depth_camera_left
   - type: depth_image
     general:
       topic_name: "/depth_camera_left/depth/image_rect_raw"
       depth_scale_factor: 0.001
-      topic_queue_length: 1
+      topic_queue_length: 10
       max_wait_for_pose: { seconds: 1.0 }
-      time_offset: { seconds: -0.025 }
+      time_offset: { seconds: 0.0 }
     integrators:
       - integration_method:
           type: hashed_wavelet_integrator
@@ -105,9 +105,9 @@ inputs:
           config_topic_name: "/depth_camera_left/depth/camera_info"
         measurement_model:
           type: continuous_ray
-          range_sigma: { meters: 0.1 }
-          scaling_free: 0.2
-          scaling_occupied: 0.4
+          range_sigma: { meters: 0.05 }
+          scaling_free: 0.4
+          scaling_occupied: 0.6
       - integration_method:
           type: hashed_wavelet_integrator
           min_range: { meters: 1.0 }
@@ -119,18 +119,18 @@ inputs:
           config_topic_name: "/depth_camera_left/depth/camera_info"
         measurement_model:
           type: continuous_ray
-          range_sigma: { meters: 0.05 }
-          scaling_free: 0.2
-          scaling_occupied: 0.4
+          range_sigma: { meters: 0.15 }
+          scaling_free: 0.4
+          scaling_occupied: 0.6
 
   # depth_camera_right
   # - type: depth_image
   #   general:
   #     topic_name: "/depth_camera_right/depth/image_rect_raw"
   #     depth_scale_factor: 0.001
-  #     topic_queue_length: 1
+  #     topic_queue_length: 10
   #     max_wait_for_pose: { seconds: 1.0 }
-  #     time_offset: { seconds: -0.025 }
+  #     time_offset: { seconds: 0.0 }
   #   integrators:
   #     - integration_method:
   #         type: hashed_wavelet_integrator
@@ -143,9 +143,9 @@ inputs:
   #         config_topic_name: "/depth_camera_right/depth/camera_info"
   #       measurement_model:
   #         type: continuous_ray
-  #         range_sigma: { meters: 0.005 }
-  #         scaling_free: 0.2
-  #         scaling_occupied: 0.4
+  #         range_sigma: { meters: 0.05 }
+  #         scaling_free: 0.5
+  #         scaling_occupied: 0.5
   #     - integration_method:
   #         type: hashed_wavelet_integrator
   #         min_range: { meters: 1.0 }
@@ -157,22 +157,22 @@ inputs:
   #         config_topic_name: "/depth_camera_right/depth/camera_info"
   #       measurement_model:
   #         type: continuous_ray
-  #         range_sigma: { meters: 0.03 }
-  #         scaling_free: 0.2
-  #         scaling_occupied: 0.4
+  #         range_sigma: { meters: 0.15 }
+  #         scaling_free: 0.5
+  #         scaling_occupied: 0.5
 
   # depth_camera_front_upper
   - type: depth_image
     general:
       topic_name: "/depth_camera_front_upper/depth/image_rect_raw"
       depth_scale_factor: 0.001
-      topic_queue_length: 1
+      topic_queue_length: 10
       max_wait_for_pose: { seconds: 1.0 }
-      time_offset: { seconds: -0.025 }
+      time_offset: { seconds: 0.0 }
     integrators:
       - integration_method:
           type: hashed_wavelet_integrator
-          min_range: { meters: 0.1 }
+          min_range: { meters: 0.3 }
           max_range: { meters: 1.0 }
           termination_update_error: 0.1
           termination_height: 0
@@ -182,8 +182,8 @@ inputs:
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.01 }
-          scaling_free: 0.2
-          scaling_occupied: 0.4
+          scaling_free: 0.4
+          scaling_occupied: 0.6
       - integration_method:
           type: hashed_wavelet_integrator
           min_range: { meters: 1.0 }
@@ -196,17 +196,17 @@ inputs:
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.05 }
-          scaling_free: 0.2
-          scaling_occupied: 0.4
+          scaling_free: 0.4
+          scaling_occupied: 0.6
 
   # depth_camera_rear_upper
   - type: depth_image
     general:
       topic_name: "/depth_camera_rear_upper/depth/image_rect_raw"
       depth_scale_factor: 0.001
-      topic_queue_length: 1
+      topic_queue_length: 10
       max_wait_for_pose: { seconds: 1.0 }
-      time_offset: { seconds: -0.025 }
+      time_offset: { seconds: 0.0 }
     integrators:
       - integration_method:
           type: hashed_wavelet_integrator
@@ -220,12 +220,12 @@ inputs:
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.01}
-          scaling_free: 0.2
-          scaling_occupied: 0.4
+          scaling_free: 0.4
+          scaling_occupied: 0.6
       - integration_method:
           type: hashed_wavelet_integrator
           min_range: { meters: 1.0 }
-          max_range: { meters: 3.0 }
+          max_range: { meters: 4.0 }
           termination_update_error: 0.1
           termination_height: 1
         projection_model:
@@ -234,17 +234,17 @@ inputs:
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.05 }
-          scaling_free: 0.2
-          scaling_occupied: 0.4
+          scaling_free: 0.4
+          scaling_occupied: 0.6
 
   # dynaarm_REALSENSE
   # - type: depth_image
   #   general:
   #     topic_name: "/dynaarm_REALSENSE/aligned_depth_to_color/image_raw"
   #     depth_scale_factor: 0.001
-  #     topic_queue_length: 1
+  #     topic_queue_length: 10
   #     max_wait_for_pose: { seconds: 1.0 }
-  #     time_offset: { seconds: -0.025 }
+  #     time_offset: { seconds: 0.0 }
   #   integrators:
   #     - integration_method:
   #         type: hashed_wavelet_integrator
@@ -257,6 +257,6 @@ inputs:
   #         config_topic_name: "/dynaarm_REALSENSE/aligned_depth_to_color/camera_info"
   #       measurement_model:
   #         type: continuous_ray
-  #         range_sigma: { meters: 0.03 }
-  #         scaling_free: 0.2
-  #         scaling_occupied: 0.4
+  #         range_sigma: { meters: 0.1 }
+  #         scaling_free: 0.5
+  #         scaling_occupied: 0.5
