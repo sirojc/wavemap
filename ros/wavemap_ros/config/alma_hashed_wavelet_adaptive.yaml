@@ -240,7 +240,7 @@ inputs:
   # dynaarm_REALSENSE
   # - type: depth_image
   #   general:
-  #     topic_name: "/dynaarm_REALSENSE/aligned_depth_to_color/image_raw"
+  #     topic_name: "/camera/aligned_depth_to_color/image_raw"
   #     depth_scale_factor: 0.001
   #     topic_queue_length: 10
   #     max_wait_for_pose: { seconds: 1.0 }
@@ -249,14 +249,14 @@ inputs:
   #     - integration_method:
   #         type: hashed_wavelet_integrator
   #         min_range: { meters: 2.0 }
-  #         max_range: { meters: 4.0 }
+  #         max_range: { meters: 6.0 }
   #         termination_update_error: 0.1
   #         termination_height: 1
   #       projection_model:
   #         type: pinhole_camera_projector
-  #         config_topic_name: "/dynaarm_REALSENSE/aligned_depth_to_color/camera_info"
+  #         config_topic_name: "/camera/aligned_depth_to_color/camera_info"
   #       measurement_model:
   #         type: continuous_ray
-  #         range_sigma: { meters: 0.1 }
-  #         scaling_free: 0.5
-  #         scaling_occupied: 0.5
+  #         range_sigma: { meters: 0.05 }
+  #         scaling_free: 0.4
+  #         scaling_occupied: 0.6
