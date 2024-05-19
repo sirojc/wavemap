@@ -49,7 +49,6 @@ ProjectorBase::Ptr wavemap::ProjectorFactory::create(
     }
     case ProjectorType::kPinholeCameraProjector: {
       std::string topic_name_config = params.getChild("projection_model")->getChild("config_topic_name")->get<std::string>().value();      
-      ROS_ERROR("%s", ("--------------------kPinholeCameraProjector Initialization for: " + topic_name_config).c_str());
 
       auto integrator = std::make_shared<PinholeCameraProjector>(topic_name_config);
     
@@ -60,7 +59,6 @@ ProjectorBase::Ptr wavemap::ProjectorFactory::create(
 
         if (integrator->isConfigInitialized()) {
           integrator->printConfig();
-          ROS_ERROR("Pinhole projector config for topic %s is valid.", topic_name_config.c_str());
           return integrator;
         }
         sleep(0.001); // wait for 0.001s
