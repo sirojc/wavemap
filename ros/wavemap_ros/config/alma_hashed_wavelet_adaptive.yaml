@@ -2,11 +2,13 @@ map:
   general:
     world_frame: "map"
     thresholding_period: { seconds: 2.0 }
-    pruning_period: { seconds: 10.0 }
+    pruning_period: { seconds: 2.0 }
     publication_period: { seconds: 2.0 }
   data_structure:
     type: hashed_wavelet_octree
     min_cell_width: { meters: 0.1 }
+    tree_height: 3
+    only_prune_blocks_if_unsused_for: { second: 1.0 } 
 
 inputs:
   # depth_camera_front_lower
