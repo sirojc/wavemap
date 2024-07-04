@@ -6,7 +6,7 @@ map:
     publication_period: { seconds: 2.0 }
   data_structure:
     type: hashed_wavelet_octree
-    min_cell_width: { meters: 0.1 }
+    min_cell_width: { meters: 0.01 }
     tree_height: 3
     only_prune_blocks_if_unsused_for: { second: 1.0 } 
 
@@ -32,22 +32,22 @@ inputs:
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.05 }
-          scaling_free: 0.4
-          scaling_occupied: 0.6
+          scaling_free: 0.8
+          scaling_occupied: 0.2
       - integration_method:
           type: hashed_wavelet_integrator
           min_range: { meters: 1.0 }
           max_range: { meters: 3.0 }
           termination_update_error: 0.05
-          termination_height: 1
+          termination_height: 0
         projection_model:
           type: pinhole_camera_projector
           config_topic_name: "/depth_camera_front_lower/depth/camera_info"
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.15 }
-          scaling_free: 0.4
-          scaling_occupied: 0.6
+          scaling_free: 0.8
+          scaling_occupied: 0.2
 
   # depth_camera_rear_lower
   - type: depth_image
@@ -70,22 +70,22 @@ inputs:
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.05 }
-          scaling_free: 0.4
-          scaling_occupied: 0.6
+          scaling_free: 0.8
+          scaling_occupied: 0.2
       - integration_method:
           type: hashed_wavelet_integrator
           min_range: { meters: 1.0 }
           max_range: { meters: 3.0 }
           termination_update_error: 0.05
-          termination_height: 1
+          termination_height: 0
         projection_model:
           type: pinhole_camera_projector
           config_topic_name: "/depth_camera_rear_lower/depth/camera_info"
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.15 }
-          scaling_free: 0.4
-          scaling_occupied: 0.6
+          scaling_free: 0.8
+          scaling_occupied: 0.2
 
     # depth_camera_left
   - type: depth_image
@@ -108,22 +108,22 @@ inputs:
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.05 }
-          scaling_free: 0.4
-          scaling_occupied: 0.6
+          scaling_free: 0.8
+          scaling_occupied: 0.2
       - integration_method:
           type: hashed_wavelet_integrator
           min_range: { meters: 1.0 }
           max_range: { meters: 3.0 }
           termination_update_error: 0.1
-          termination_height: 1
+          termination_height: 0
         projection_model:
           type: pinhole_camera_projector
           config_topic_name: "/depth_camera_left/depth/camera_info"
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.15 }
-          scaling_free: 0.4
-          scaling_occupied: 0.6
+          scaling_free: 0.8
+          scaling_occupied: 0.2
 
   # depth_camera_right
   - type: depth_image
@@ -146,22 +146,22 @@ inputs:
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.05 }
-          scaling_free: 0.5
-          scaling_occupied: 0.5
+          scaling_free: 0.8
+          scaling_occupied: 0.2
       - integration_method:
           type: hashed_wavelet_integrator
           min_range: { meters: 1.0 }
           max_range: { meters: 3.0 }
           termination_update_error: 0.1
-          termination_height: 1
+          termination_height: 0
         projection_model:
           type: pinhole_camera_projector
           config_topic_name: "/depth_camera_right/depth/camera_info"
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.15 }
-          scaling_free: 0.5
-          scaling_occupied: 0.5
+          scaling_free: 0.8
+          scaling_occupied: 0.2
 
   # depth_camera_front_upper
   - type: depth_image
@@ -184,22 +184,22 @@ inputs:
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.01 }
-          scaling_free: 0.4
-          scaling_occupied: 0.6
+          scaling_free: 0.8
+          scaling_occupied: 0.2
       - integration_method:
           type: hashed_wavelet_integrator
           min_range: { meters: 1.0 }
           max_range: { meters: 3.0 }
           termination_update_error: 0.1
-          termination_height: 1
+          termination_height: 0
         projection_model:
           type: pinhole_camera_projector
           config_topic_name: "/depth_camera_front_upper/depth/camera_info"
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.05 }
-          scaling_free: 0.4
-          scaling_occupied: 0.6
+          scaling_free: 0.8
+          scaling_occupied: 0.2
 
   # depth_camera_rear_upper
   - type: depth_image
@@ -222,22 +222,22 @@ inputs:
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.01}
-          scaling_free: 0.4
-          scaling_occupied: 0.6
+          scaling_free: 0.8
+          scaling_occupied: 0.2
       - integration_method:
           type: hashed_wavelet_integrator
           min_range: { meters: 1.0 }
           max_range: { meters: 4.0 }
           termination_update_error: 0.1
-          termination_height: 1
+          termination_height: 0
         projection_model:
           type: pinhole_camera_projector
           config_topic_name: "/depth_camera_rear_upper/depth/camera_info"
         measurement_model:
           type: continuous_ray
           range_sigma: { meters: 0.05 }
-          scaling_free: 0.4
-          scaling_occupied: 0.6
+          scaling_free: 0.8
+          scaling_occupied: 0.2
 
   # dynaarm_REALSENSE
   # - type: depth_image
